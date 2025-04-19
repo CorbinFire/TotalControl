@@ -4,6 +4,7 @@ import time
 import math
 import sys
 
+
 pygame.init()
 pygame.mixer.init()
 wn = pygame.display.set_mode((2600,1400))
