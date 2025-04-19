@@ -8,11 +8,15 @@ pygame.init()
 pygame.mixer.init()
 wn = pygame.display.set_mode((2600,1400))
 background = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con background.png'),(2600,1400))
+class background:
+    def __init__(self,pos) -> None:
+        self.pos = pos
+        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con background.png'),(2600,1400))
 
 class map_hidder:
     def __init__(self,pos) -> None:
         self.pos = pos
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con dark cloud hidemap.png'),(240,240))
+        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con dark cloud hidemap.png'),(600,600))
 
 class flamethrower_soldier:
     def __init__(self,pos,side,speed,color) -> None:
@@ -321,14 +325,10 @@ while True:
                     if y.hp > 0:
                         y.hpbar-=(50/y.originalhp)*x.damage
         count_for_bullet_place+=1
-    which_to_disapear = []
-    for i in range(len(map_hidders)):
-        for j in men:
-            if j.pos[0] - map_hidders[i].pos[0] < 400 and j.pos[0] - map_hidders[i].pos[0] > -400 and j.pos[1] - map_hidders[i].pos[1] < 400 and j.pos[1] - map_hidders[i].pos[1] > -400 and j.side == 'm':
-                which_to_disapear.append(i)
-        wn.blit(map_hidders[i].im,map_hidders[i].pos)
-    a = 0
-    for i in which_to_disapear:
-        map_hidders_destroyed.append(map_hidders.pop(i-a))
-        a+=1
+    # which_to_disapear = []
+    # for i in range(len(map_hidders)):
+    #     for j in men:
+    #         if j.pos[0] - map_hidders[i].pos[0] < 400 and j.pos[0] - map_hidders[i].pos[0] > -400 and j.pos[1] - map_hidders[i].pos[1] < 400 and j.pos[1] - map_hidders[i].pos[1] > -400 and j.side == 'm':
+    #             which_to_disapear.append(i)
+    #     wn.blit(map_hidders[i].im,map_hidders[i].pos)
     pygame.display.flip()
