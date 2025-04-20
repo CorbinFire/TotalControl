@@ -8,7 +8,7 @@ import sys
 pygame.init()
 pygame.mixer.init()
 wn = pygame.display.set_mode((2600,1400))
-background = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con background.png'),(2600,1400))
+
 class background:
     def __init__(self,pos) -> None:
         self.pos = pos
@@ -89,11 +89,12 @@ class picsteel_wall:
         self.pos = pos
         self.hp = None
 
+backgrounds = [background([-1300,-700]),background([1300,700]),background([-1300,700]),background([1300,-700])]
 map_hidders = []  
 map_hidders_destroyed = []  
-for i in range(22):
-    for j in range(12):
-        map_hidders.append(map_hidder([i*120-30,j*120-30]))
+# for i in range(22):
+#     for j in range(12):
+#         map_hidders.append(map_hidder([i*120-30,j*120-30]))
 bullets = []
 destroyed_bullets = []
 walls = []
@@ -108,8 +109,44 @@ clicked_on_fs_ps_gen = False
 # flame_sound = pygame.mixer.Sound()
 shot_sound = pygame.mixer.Sound('/Users/cameroncheke/TotalControl/gunshot.mp3')
 # n = 1
+def scrolling_screen(n1,n2):
+    for i in men:
+        i.pos[0]+=n1
+        i.pos[1]+=n2
+    for i in buildings:
+        if i.unittype != 'pic':
+            i.pos[0]+=n1
+            i.pos[1]+=n2
+    for i in backgrounds:
+        i.pos[0]+=n1
+        i.pos[1]+=n2
 while True:
-    
+    mouse = pygame.mouse.get_pos()
+    scroll = True
+    for i in backgrounds:
+        if i.pos[0] < -2600:
+            scrolling_screen(-(i.pos[0]+2600)+1,0)
+            scroll = False
+        if i.pos[0] > 2600:
+            scrolling_screen(-(i.pos[0]-2600)-1,0)
+            scroll = False
+        if i.pos[1] < -1400:
+            scrolling_screen(0,-(i.pos[1]+1400)+1)
+            scroll = False
+        if i.pos[1] > 1400:
+            scrolling_screen(0,-(i.pos[1]-1400)-1)
+            scroll = False
+
+    if scroll == True:
+        if mouse[0] < 100:
+            scrolling_screen(40,0)
+        if mouse[0] > 2500:
+            scrolling_screen(-40,0)
+        if mouse[1] < 100:
+            scrolling_screen(0,40)
+        if mouse[1] > 1300:
+            scrolling_screen(0,-40)
+
     shot_sound_first = True
     check_building=None
     count+=1
@@ -144,7 +181,7 @@ while True:
                         if event.type == pygame.QUIT:
                             pygame.quit()
                         if event.type == pygame.MOUSEBUTTONDOWN:
-                            buildings.append(buildingfspsgen(pygame.mouse.get_pos(),'m',(0,0,255)))
+                            buildings.append(buildingfspsgen(list(pygame.mouse.get_pos()),'m',(0,0,255)))
                             done = True
             
             if clicked[0] > 0 and clicked[0] < 250 and clicked[1] > 0 and clicked[1] < 225 and money2 >= 300:
@@ -155,7 +192,7 @@ while True:
                         if event.type == pygame.QUIT:
                             pygame.quit()
                         if event.type == pygame.MOUSEBUTTONDOWN:
-                            buildings.append(buildingfspsgen(pygame.mouse.get_pos(),'e',(255,0,0)))
+                            buildings.append(buildingfspsgen(list(pygame.mouse.get_pos()),'e',(255,0,0)))
                             done = True
             
             for i in men:
@@ -172,7 +209,8 @@ while True:
                 i.spawnps = True
                 check_building = i
                 money2 -= 50
-    wn.blit(background,(0,0))
+    for i in backgrounds:
+        wn.blit(i.im,i.pos)
     for i in buildings:
         for j in men:
             if i.pos[0] - j.pos[0] > -175 and i.pos[0] - j.pos[0] < 0 and i.pos[1] - j.pos[1] > -175 and i.pos[1] - j.pos[1] < 0 and i.side != j.side and i.unittype!='pic':
