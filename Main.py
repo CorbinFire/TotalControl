@@ -113,6 +113,9 @@ def scrolling_screen(n1,n2):
     for i in men:
         i.pos[0]+=n1
         i.pos[1]+=n2
+        if i.target != 'find' and i.pos != i.target:
+            i.target[0]+=n1
+            i.target[1]+=n2
     for i in buildings:
         if i.unittype != 'pic':
             i.pos[0]+=n1
@@ -120,8 +123,46 @@ def scrolling_screen(n1,n2):
     for i in backgrounds:
         i.pos[0]+=n1
         i.pos[1]+=n2
+
+home_screen_showing = True
+font = pygame.font.Font('freesansbold.ttf', 150)
+text1 = font.render('START', True,(0,255,0))
+text2 = font.render('INSTRUCTIONS', True,(0,255,0))
+being_held = 0
+rightclicked = False
+placeofrightclick = None
+while home_screen_showing:
+    pygame.draw.rect(wn,(255,0,0),(1080,380,525,175),5)
+    wn.blit(text1,(1100,400))
+    wn.blit(text2,(800,700))
+    pygame.display.flip()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            home_screen_showing = False
+
 while True:
+    for i in backgrounds:
+        wn.blit(i.im,i.pos)
     mouse = pygame.mouse.get_pos()
+    if pygame.mouse.get_pressed()[2]:
+        being_held+=1
+        if rightclicked == True and being_held > 1:
+            pygame.draw.rect(wn,(0,0,0),(placeofrightclick[0],placeofrightclick[1],mouse[0]-placeofrightclick[0],mouse[1]-placeofrightclick[1]),3)
+            for i in men:
+                if i.pos[0] > placeofrightclick[0] and i.pos[0] < mouse[0] and i.pos[1] > placeofrightclick[1] and i.pos[1] < mouse[1] and i.side == 'm':
+                    pygame.draw.rect(wn,(0,0,0),(i.pos[0],i.pos[1],50,50),2)
+        else:
+            
+            rightclicked = True
+            placeofrightclick = mouse
+    else:
+        if rightclicked == True:
+                for i in men:
+                    if i.pos[0] > placeofrightclick[0] and i.pos[0] < mouse[0] and i.pos[1] > placeofrightclick[1] and i.pos[1] < mouse[1] and i.side == 'm':
+                        i.target='find'
+        being_held = 0
     scroll = True
     for i in backgrounds:
         if i.pos[0] < -2600:
@@ -197,7 +238,7 @@ while True:
             
             for i in men:
                 if i.target == 'find':
-                    i.target = clicked
+                    i.target = [clicked[0],clicked[1]]
                 if i.pos[0] - clicked[0] > -75 and i.pos[0] - clicked[0] < 0 and i.pos[1] - clicked[1] > -75 and i.pos[1] - clicked[1] < 0  and i.side == 'm':
                     i.target = 'find'
     for i in buildings:
@@ -209,8 +250,7 @@ while True:
                 i.spawnps = True
                 check_building = i
                 money2 -= 50
-    for i in backgrounds:
-        wn.blit(i.im,i.pos)
+    
     for i in buildings:
         for j in men:
             if i.pos[0] - j.pos[0] > -175 and i.pos[0] - j.pos[0] < 0 and i.pos[1] - j.pos[1] > -175 and i.pos[1] - j.pos[1] < 0 and i.side != j.side and i.unittype!='pic':
@@ -246,9 +286,8 @@ while True:
             dx = i.target[0] - i.pos[0]
             dy = i.target[1] - i.pos[1]
             distance = (dx**2 + dy**2)**0.5
-            if distance <= i.speed:
-                i.pos[0] = i.target[0]
-                i.pos[1] = i.target[1]
+            if distance <= 100:
+                i.target = i.pos
             else:
                 i.pos[0] += i.speed * dx / distance
                 i.pos[1] += i.speed * dy / distance
@@ -300,7 +339,7 @@ while True:
                     if shot_sound_first == True:
                         shot_sound.play()
                         shot_sound_first = False
-                    bullets.append(bullet([i.pos[0]+3,i.pos[1]+10],60,[j.pos[0]+20,j.pos[1]+20],i.side))
+                    bullets.append(bullet([i.pos[0]+3,i.pos[1]+10],60,[j.pos[0]+40,j.pos[1]+20],i.side))
                     i.move = False
                     canshoot = False
                     cantattack=None
