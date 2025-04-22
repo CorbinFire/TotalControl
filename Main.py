@@ -2,12 +2,15 @@ import pygame
 import random
 import time
 import math
-import sys
+import os
 
 
 pygame.init()
 pygame.mixer.init()
-wn = pygame.display.set_mode((2600,1400))
+os.environ['SDL_VIDEO_CENTERED'] = '1'
+info = pygame.display.Info()
+width,hieght = info.current_w,info.current_h
+wn = pygame.display.set_mode((width,hieght),pygame.RESIZABLE)
 
 class background:
     def __init__(self,pos) -> None:
@@ -58,13 +61,13 @@ class buildingsoldiergen:
         self.spawnfs = False
         self.spawnps = False
         self.hp = 150
-        self.fspsgen = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con soldier generator.png'),(175,175))
+        self.fspsgen = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con soldier gen building.png'),(200,200))
         self.pos = pos
 
 class picbuildingfspsgen:
-    def __init__(self,pos) -> None:
+    def __init__(self,pos,side) -> None:
         self.unittype='pic'
-        self.side = None
+        self.side = side
         self.fspsgen = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con soldier generator.png'),(175,175))
         self.pos = pos    
 
@@ -104,7 +107,7 @@ destroyed_bullets = []
 walls = []
 men = [pistol_soldier([2100,700],'m',12,(0,0,255))]
 dead = []
-buildings = [picbuildingfspsgen([2350,0]),picbuildingfspsgen([50,0]),buildingsoldiergen([900,700],'e1',(255,255,0)),buildingsoldiergen([1700,700],'e2',(255,0,255))]
+buildings = [picbuildingfspsgen([2350,0],'m'),picbuildingfspsgen([50,0],'e'),buildingsoldiergen([900,700],'e1',(255,255,0)),buildingsoldiergen([1700,700],'e2',(255,0,255))]
 count = 0
 clicked_on_fs_ps_gen = False
 # die_sound = pygame.mixer.Sound()
@@ -155,9 +158,11 @@ while home_screen_showing:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if mouse[0] < 2025 and mouse[0] > 780 and mouse[1] < 850 and mouse[1] > 680:
                 home_screen_showing = False
-            if mouse[0] < 2025 and mouse[0] > 780 and mouse[1] < 850 and mouse[1] > 680:
+            if mouse[0] < 2025 and mouse[0] > 780 and mouse[1] < 550 and mouse[1] > 380:
                 home_screen_showing = False
 while True:
+    info = pygame.display.Info()
+    width1,hieght1 = info.current_w,info.current_h
     for i in backgrounds:
         wn.blit(i.im,i.pos)
     mouse = pygame.mouse.get_pos()
@@ -257,6 +262,8 @@ while True:
                 if i.pos[0] - clicked[0] > -75 and i.pos[0] - clicked[0] < 0 and i.pos[1] - clicked[1] > -75 and i.pos[1] - clicked[1] < 0  and i.side == 'm':
                     i.target = 'find'
     for i in buildings:
+        # if i.unittype == 'pic' and i.side == 'm':
+        #     i.pos[0]-=width
         if count%15==0 and money2 > 200 and i.side!='m':
             i.spawnfs = True
             check_building = i
@@ -300,7 +307,7 @@ while True:
             #         i.hp += 1
 
         wn.blit(i.fspsgen,i.pos)
-        if i.side != None:
+        if i.unittype != 'pic':
             pygame.draw.rect(wn,i.color,(i.pos[0],i.pos[1]-20,i.hp,10))
             pygame.draw.rect(wn,(0,0,0),(i.pos[0],i.pos[1]-20,150,10),width=1)
         if i.unittype==['fs','ps'] and i.spawnfs == True:
