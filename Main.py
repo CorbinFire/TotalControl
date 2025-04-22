@@ -43,13 +43,13 @@ class pistol_soldier:
         self.side = side
         self.color = color
         self.unittype='ps'
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con pistol soldier.png'),(50,50))
+        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con pistol soldier2.png'),(50,50))
         self.originalpos = pos
         self.speed = speed
         self.pos = pos
         self.target = pos
 
-class buildingfspsgen:
+class buildingsoldiergen:
     def __init__(self,pos,side,color) -> None:
         self.unittype=['fs','ps']
         self.side = side
@@ -89,6 +89,10 @@ class picsteel_wall:
         self.pos = pos
         self.hp = None
 
+class team:
+    def __init__(self) -> None:
+        self.build = True
+
 backgrounds = [background([-1300,-700]),background([1300,700]),background([-1300,700]),background([1300,-700])]
 map_hidders = []  
 map_hidders_destroyed = []  
@@ -100,10 +104,8 @@ destroyed_bullets = []
 walls = []
 men = [pistol_soldier([2100,700],'m',12,(0,0,255))]
 dead = []
-buildings = [picbuildingfspsgen([2350,0]),picbuildingfspsgen([50,0])]
+buildings = [picbuildingfspsgen([2350,0]),picbuildingfspsgen([50,0]),buildingsoldiergen([900,700],'e1',(255,255,0)),buildingsoldiergen([1700,700],'e2',(255,0,255))]
 count = 0
-money1 = 20000000
-money2 = 20000000
 clicked_on_fs_ps_gen = False
 # die_sound = pygame.mixer.Sound()
 # flame_sound = pygame.mixer.Sound()
@@ -124,6 +126,14 @@ def scrolling_screen(n1,n2):
         i.pos[0]+=n1
         i.pos[1]+=n2
 
+money1 = 100000
+money2 = 100000
+money3 = 100000
+money4 = 100000
+build1 = True
+build2 = True
+build3 = True
+
 home_screen_showing = True
 font = pygame.font.Font('freesansbold.ttf', 150)
 text1 = font.render('START', True,(0,255,0))
@@ -131,8 +141,11 @@ text2 = font.render('INSTRUCTIONS', True,(0,255,0))
 being_held = 0
 rightclicked = False
 placeofrightclick = None
+
 while home_screen_showing:
+    mouse = pygame.mouse.get_pos()
     pygame.draw.rect(wn,(255,0,0),(1080,380,525,175),5)
+    pygame.draw.rect(wn,(255,0,0),(780,680,1225,175),5)
     wn.blit(text1,(1100,400))
     wn.blit(text2,(800,700))
     pygame.display.flip()
@@ -140,8 +153,10 @@ while home_screen_showing:
         if event.type == pygame.QUIT:
             pygame.quit()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            home_screen_showing = False
-
+            if mouse[0] < 2025 and mouse[0] > 780 and mouse[1] < 850 and mouse[1] > 680:
+                home_screen_showing = False
+            if mouse[0] < 2025 and mouse[0] > 780 and mouse[1] < 850 and mouse[1] > 680:
+                home_screen_showing = False
 while True:
     for i in backgrounds:
         wn.blit(i.im,i.pos)
@@ -222,7 +237,7 @@ while True:
                         if event.type == pygame.QUIT:
                             pygame.quit()
                         if event.type == pygame.MOUSEBUTTONDOWN:
-                            buildings.append(buildingfspsgen(list(pygame.mouse.get_pos()),'m',(0,0,255)))
+                            buildings.append(buildingsoldiergen(list(pygame.mouse.get_pos()),'m',(0,0,255)))
                             done = True
             
             if clicked[0] > 0 and clicked[0] < 250 and clicked[1] > 0 and clicked[1] < 225 and money2 >= 300:
@@ -233,7 +248,7 @@ while True:
                         if event.type == pygame.QUIT:
                             pygame.quit()
                         if event.type == pygame.MOUSEBUTTONDOWN:
-                            buildings.append(buildingfspsgen(list(pygame.mouse.get_pos()),'e',(255,0,0)))
+                            buildings.append(buildingsoldiergen(list(pygame.mouse.get_pos()),'e',(255,0,0)))
                             done = True
             
             for i in men:
@@ -242,15 +257,34 @@ while True:
                 if i.pos[0] - clicked[0] > -75 and i.pos[0] - clicked[0] < 0 and i.pos[1] - clicked[1] > -75 and i.pos[1] - clicked[1] < 0  and i.side == 'm':
                     i.target = 'find'
     for i in buildings:
-        if count%15==0 and money2 > 200 and i.side=='e':
+        if count%15==0 and money2 > 200 and i.side!='m':
             i.spawnfs = True
             check_building = i
             money2 -= 50
-            if count%30==0 and money2 > 100 and i.side=='e':
+            if count%30==0 and money2 > 100 and i.side!='m':
                 i.spawnps = True
                 check_building = i
                 money2 -= 50
-    
+        
+        if money2 > 1000 and count%200==0 and i.side != 'm' and i.unittype != 'pic':
+            money2-=300
+            if i.side == 'e' and build1 == True:
+                build1 = False
+                n1 = random.randint(-1,1)
+                n2 = random.randint(-1,1)
+                buildings.append(buildingsoldiergen([i.pos[0]+200*n1,i.pos[1]+200*n2],i.side,i.color))
+            if i.side == 'e1' and build2 == True:
+                build2 = False
+                n1 = random.randint(-1,1)
+                n2 = random.randint(-1,1)
+                buildings.append(buildingsoldiergen([i.pos[0]+200*n1,i.pos[1]+200*n2],i.side,i.color))
+            if i.side == 'e2' and build3 == True:
+                build3 = False
+                n1 = random.randint(-1,1)
+                n2 = random.randint(-1,1)
+                buildings.append(buildingsoldiergen([i.pos[0]+200*n1,i.pos[1]+200*n2],i.side,i.color))
+            
+
     for i in buildings:
         for j in men:
             if i.pos[0] - j.pos[0] > -175 and i.pos[0] - j.pos[0] < 0 and i.pos[1] - j.pos[1] > -175 and i.pos[1] - j.pos[1] < 0 and i.side != j.side and i.unittype!='pic':
@@ -276,6 +310,7 @@ while True:
             
         i.spawnfs = False
         i.spawnps = False
+
     count_for_men_place = 0
     cantattack = []
     for i in men:
@@ -335,20 +370,22 @@ while True:
 
 
             if cantattack != j and i.pos[0] - j.pos[0] > -500 and i.pos[0] - j.pos[0] < 500 and i.pos[1] - j.pos[1] > -500 and i.pos[1] - j.pos[1] < 100 and i.side != j.side and target_picked == False:
-                if i.unittype == 'ps' and count%15 == 0:
+                if i.unittype == 'ps' and count%2 == 0:
                     if shot_sound_first == True:
                         shot_sound.play()
-                        shot_sound_first = False
-                    bullets.append(bullet([i.pos[0]+3,i.pos[1]+10],60,[j.pos[0]+40,j.pos[1]+20],i.side))
+                    shot_sound_first = False
+                    bullets.append(bullet([i.pos[0]+3,i.pos[1]+10],20,[j.pos[0]+40,j.pos[1]+20],i.side))
                     i.move = False
                     canshoot = False
                     cantattack=None
                     target_picked = True
+                    
             if i.side != 'm' and i.pos[0] - j.pos[0] > -700 and i.pos[0] - j.pos[0] < 700 and i.pos[1] - j.pos[1] > -700 and i.pos[1] - j.pos[1] < 700 and i.side != j.side and target_picked == False and i.move == True:
                 target_picked = True
                 dx = j.pos[0]-50 - i.pos[0]
                 dy = j.pos[1]-50 - i.pos[1]
                 distance = (dx**2 + dy**2)**0.5
+
                 if distance <= i.speed:
                     pass
                     # i.originalpos[0] = j.pos[0]
