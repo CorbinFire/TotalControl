@@ -15,12 +15,12 @@ wn = pygame.display.set_mode((width,hieght),pygame.RESIZABLE)
 class background:
     def __init__(self,pos) -> None:
         self.pos = pos
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con background.png'),(2600,1400))
+        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con background.png'),(width,hieght))
 
 class map_hidder:
     def __init__(self,pos) -> None:
         self.pos = pos
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con dark cloud hidemap.png'),(600,600))
+        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con dark cloud hidemap.png'),(-2000+width,-800+hieght))
 
 class flamethrower_soldier:
     def __init__(self,pos,side,speed,color) -> None:
@@ -31,7 +31,7 @@ class flamethrower_soldier:
         self.side = side
         self.color = color
         self.unittype='fs'
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con flamethrower soldier.png'),(65,65))
+        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con flamethrower soldier.png'),(65-2600+width,65-1400+hieght))
         self.originalpos = pos
         self.speed = speed
         self.pos = pos
@@ -201,11 +201,11 @@ while True:
     if scroll == True:
         if mouse[0] < 100:
             scrolling_screen(40,0)
-        if mouse[0] > 2500:
+        if mouse[0] > -100+width1:
             scrolling_screen(-40,0)
         if mouse[1] < 100:
             scrolling_screen(0,40)
-        if mouse[1] > 1300:
+        if mouse[1] > -100+hieght1:
             scrolling_screen(0,-40)
 
     shot_sound_first = True
