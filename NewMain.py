@@ -15,12 +15,12 @@ wn = pygame.display.set_mode((width-20,hieght-20))
 class background:
     def __init__(self,pos) -> None:
         self.pos = pos
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con background.png'),(width-20,hieght-20))
+        self.im = pygame.transform.scale(pygame.image.load('/Users/skittles/CORBIN CODE/TotalControl/total con background.png'),(width-20,hieght-20))
 
 class map_hidder:
     def __init__(self,pos) -> None:
         self.pos = pos
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con dark cloud hidemap.png'),((width-20)/40,(width-20)/40))
+        self.im = pygame.transform.scale(pygame.image.load('/Users/skittles/CORBIN CODE/TotalControl/total con dark cloud hidemap.png'),((width-20)/40,(width-20)/40))
 
 class flamethrower_soldier:
     def __init__(self,pos,side,speed,color) -> None:
@@ -31,7 +31,7 @@ class flamethrower_soldier:
         self.side = side
         self.color = color
         self.unittype='fs'
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con flamethrower soldier.png'),((width-20)/50,(width-20)/50))
+        self.im = pygame.transform.scale(pygame.image.load('/Users/skittles/CORBIN CODE/TotalControl/total con flamethrower soldier.png'),((width-20)/50,(width-20)/50))
         self.originalpos = pos
         self.speed = speed
         self.pos = pos
@@ -46,7 +46,7 @@ class pistol_soldier:
         self.side = side
         self.color = color
         self.unittype='ps'
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con pistol soldier2.png'),((width-20)/50,(width-20)/50))
+        self.im = pygame.transform.scale(pygame.image.load('/Users/skittles/CORBIN CODE/TotalControl/total con pistol soldier2.png'),((width-20)/50,(width-20)/50))
         self.originalpos = pos
         self.speed = speed
         self.pos = pos
@@ -61,14 +61,14 @@ class buildingsoldiergen:
         self.spawnfs = False
         self.spawnps = False
         self.hp = 150
-        self.fspsgen = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con soldier generator.png'),((width-20)/20,(width-20)/20))
+        self.fspsgen = pygame.transform.scale(pygame.image.load('/Users/skittles/CORBIN CODE/TotalControl/total con soldier generator.png'),((width-20)/20,(width-20)/20))
         self.pos = pos
 
 class picbuildingfspsgen:
     def __init__(self,pos,side) -> None:
         self.unittype='pic'
         self.side = side
-        self.fspsgen = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con soldier generator.png'),((width-20)/20,(width-20)/20))
+        self.fspsgen = pygame.transform.scale(pygame.image.load('/Users/skittles/CORBIN CODE/TotalControl/total con soldier generator.png'),((width-20)/20,(width-20)/20))
         self.pos = pos    
 
 class bullet:
@@ -107,12 +107,12 @@ destroyed_bullets = []
 walls = []
 men = []
 dead = []
-buildings = [picbuildingfspsgen([10,10],'m'),picbuildingfspsgen([width-30,10],'e'),buildingsoldiergen([200,200],'e1',(255,255,0)),buildingsoldiergen([300,300],'e2',(255,0,255))]
+buildings = [picbuildingfspsgen([10,10],'m'),picbuildingfspsgen([width-(width)/20,10],'e'),buildingsoldiergen([200,200],'e1',(255,255,0)),buildingsoldiergen([300,300],'e2',(255,0,255))]
 count = 0
 clicked_on_fs_ps_gen = False
 # die_sound = pygame.mixer.Sound()
 # flame_sound = pygame.mixer.Sound()
-shot_sound = pygame.mixer.Sound('/Users/cameroncheke/TotalControl/gunshot.mp3')
+shot_sound = pygame.mixer.Sound('/Users/skittles/CORBIN CODE/TotalControl/gunshot.mp3')
 # n = 1
 def scrolling_screen(n1,n2):
     for i in men:
@@ -138,7 +138,7 @@ build2 = True
 build3 = True
 
 home_screen_showing = True
-font = pygame.font.Font('freesansbold.ttf',150 )
+font = pygame.font.Font('freesansbold.ttf',round(hieght-hieght*7/8) )
 text1 = font.render('START', True,(0,255,0))
 text2 = font.render('INSTRUCTIONS', True,(0,255,0))
 being_held = 0
@@ -186,32 +186,32 @@ while True:
     scroll = True
     for i in backgrounds:
         if i.pos[0] < -width:
-            scrolling_screen(-(i.pos[0]+2600)+1,0)
+            scrolling_screen(-(i.pos[0]+width)+1,0)
             scroll = False
         if i.pos[0] > width:
-            scrolling_screen(-(i.pos[0]-2600)-1,0)
+            scrolling_screen(-(i.pos[0]-width)-1,0)
             scroll = False
         if i.pos[1] < -hieght:
-            scrolling_screen(0,-(i.pos[1]+1400)+1)
+            scrolling_screen(0,-(i.pos[1]+hieght)+1)
             scroll = False
         if i.pos[1] > hieght:
-            scrolling_screen(0,-(i.pos[1]-1400)-1)
+            scrolling_screen(0,-(i.pos[1]-hieght)-1)
             scroll = False
 
     if scroll == True:
-        if mouse[0] < 100:
+        if mouse[0] < width/26:
             scrolling_screen(40,0)
-        if mouse[0] > -100+width:
+        if mouse[0] > -width/26+width:
             scrolling_screen(-40,0)
-        if mouse[1] < 100:
+        if mouse[1] < hieght/14:
             scrolling_screen(0,40)
-        if mouse[1] > -100+hieght:
+        if mouse[1] > -hieght/14+hieght:
             scrolling_screen(0,-40)
 
     shot_sound_first = True
     check_building=None
     count+=1
-    time.sleep(0.01)
+    time.sleep(0.08)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -234,7 +234,7 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN: 
             
             clicked = pygame.mouse.get_pos()
-            if clicked[0] > 2350 and clicked[0] < 2550 and clicked[1] > 0 and clicked[1] < 225 and money1 >= 300:
+            if clicked[0] > width-((width-20)/20+20) and clicked[0] < width-((width-20)/20+20) and clicked[1] > 0 and clicked[1] < (width-20)/20 and money1 >= 300:
                 done = False
                 money1-=300
                 while done == False:
