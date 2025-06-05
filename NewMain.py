@@ -15,12 +15,12 @@ wn = pygame.display.set_mode((width-20,hieght-20))
 class background:
     def __init__(self,pos) -> None:
         self.pos = pos
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con background.png'),(width-20,hieght-20))
+        self.im = pygame.transform.scale(pygame.image.load('total con background.png'),(width-20,hieght-20))
 
 class map_hidder:
     def __init__(self,pos) -> None:
         self.pos = pos
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con dark cloud hidemap.png'),((width-20)/40,(width-20)/40))
+        self.im = pygame.transform.scale(pygame.image.load('total con dark cloud hidemap.png'),((width-20)/40,(width-20)/40))
 
 class flamethrower_soldier:
     def __init__(self,pos,side,speed,color) -> None:
@@ -31,7 +31,7 @@ class flamethrower_soldier:
         self.side = side
         self.color = color
         self.unittype='fs'
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con flamethrower soldier.png'),((width-20)/50,(width-20)/50))
+        self.im = pygame.transform.scale(pygame.image.load('total con flamethrower soldier.png'),((width-20)/50,(width-20)/50))
         self.originalpos = pos
         self.speed = speed
         self.pos = pos
@@ -46,7 +46,22 @@ class pistol_soldier:
         self.side = side
         self.color = color
         self.unittype='ps'
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con pistol soldier2.png'),((width-20)/50,(width-20)/50))
+        self.im = pygame.transform.scale(pygame.image.load('total con pistol soldier2.png'),((width-20)/50,(width-20)/50))
+        self.originalpos = pos
+        self.speed = speed
+        self.pos = pos
+        self.target = pos
+
+class tank:
+    def __init__(self,pos,side,speed,color) -> None:
+        self.hp = 700
+        self.move = True
+        self.originalhp = 700
+        self.hpbar = 50
+        self.side = side
+        self.color = color
+        self.unittype='t'
+        self.im = pygame.transform.scale(pygame.image.load('total con tank.png'),((width-20)/35,(width-20)/25))
         self.originalpos = pos
         self.speed = speed
         self.pos = pos
@@ -54,21 +69,22 @@ class pistol_soldier:
 
 class buildingsoldiergen:
     def __init__(self,pos,side,color) -> None:
-        self.unittype=['fs','ps']
+        self.unittype=['fs','ps','t']
         self.side = side
         self.color = color
         self.hpbar = 150
         self.spawnfs = False
         self.spawnps = False
+        self.spawnt = False
         self.hp = 150
-        self.fspsgen = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con soldier generator.png'),((width-20)/20,(width-20)/20))
+        self.fspsgen = pygame.transform.scale(pygame.image.load('total con soldier generator.png'),((width-20)/20,(width-20)/20))
         self.pos = pos
 
 class picbuildingfspsgen:
     def __init__(self,pos,side) -> None:
         self.unittype='pic'
         self.side = side
-        self.fspsgen = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con soldier generator.png'),((width-20)/20,(width-20)/20))
+        self.fspsgen = pygame.transform.scale(pygame.image.load('total con soldier generator.png'),((width-20)/20,(width-20)/20))
         self.pos = pos    
 
 class bullet:
@@ -105,14 +121,14 @@ map_hidders_destroyed = []
 bullets = []
 destroyed_bullets = []
 walls = []
-men = []
+men = [tank([500,500],'e',10, (255,0,0))]
 dead = []
-buildings = [picbuildingfspsgen([10,10],'m'),picbuildingfspsgen([width-30,10],'e'),buildingsoldiergen([200,200],'e1',(255,255,0)),buildingsoldiergen([300,300],'e2',(255,0,255))]
+buildings = [picbuildingfspsgen([10,10],'m'),picbuildingfspsgen([width-(width)/20,10],'e'),buildingsoldiergen([200,200],'e1',(255,255,0)),buildingsoldiergen([300,300],'e2',(255,0,255))]
 count = 0
 clicked_on_fs_ps_gen = False
 # die_sound = pygame.mixer.Sound()
 # flame_sound = pygame.mixer.Sound()
-shot_sound = pygame.mixer.Sound('/Users/cameroncheke/TotalControl/gunshot.mp3')
+shot_sound = pygame.mixer.Sound('gunshot.mp3')
 # n = 1
 def scrolling_screen(n1,n2):
     for i in men:
@@ -138,7 +154,7 @@ build2 = True
 build3 = True
 
 home_screen_showing = True
-font = pygame.font.Font('freesansbold.ttf',150 )
+font = pygame.font.Font('freesansbold.ttf',round(hieght-hieght*7/8) )
 text1 = font.render('START', True,(0,255,0))
 text2 = font.render('INSTRUCTIONS', True,(0,255,0))
 being_held = 0
@@ -166,7 +182,7 @@ while True:
     for i in backgrounds:
         wn.blit(i.im,i.pos)
     mouse = pygame.mouse.get_pos()
-    if pygame.mouse.get_pressed()[2]:
+    if pygame.mouse.get_pressed()[0] or pygame.mouse.get_pressed()[1] or pygame.mouse.get_pressed()[2]:
         being_held+=1
         if rightclicked == True and being_held > 1:
             pygame.draw.rect(wn,(0,0,0),(placeofrightclick[0],placeofrightclick[1],mouse[0]-placeofrightclick[0],mouse[1]-placeofrightclick[1]),3)
@@ -186,26 +202,26 @@ while True:
     scroll = True
     for i in backgrounds:
         if i.pos[0] < -width:
-            scrolling_screen(-(i.pos[0]+2600)+1,0)
+            scrolling_screen(-(i.pos[0]+width)+1,0)
             scroll = False
         if i.pos[0] > width:
-            scrolling_screen(-(i.pos[0]-2600)-1,0)
+            scrolling_screen(-(i.pos[0]-width)-1,0)
             scroll = False
         if i.pos[1] < -hieght:
-            scrolling_screen(0,-(i.pos[1]+1400)+1)
+            scrolling_screen(0,-(i.pos[1]+hieght)+1)
             scroll = False
         if i.pos[1] > hieght:
-            scrolling_screen(0,-(i.pos[1]-1400)-1)
+            scrolling_screen(0,-(i.pos[1]-hieght)-1)
             scroll = False
 
     if scroll == True:
-        if mouse[0] < 100:
+        if mouse[0] < width/26:
             scrolling_screen(40,0)
-        if mouse[0] > -100+width:
+        if mouse[0] > -width/26+width:
             scrolling_screen(-40,0)
-        if mouse[1] < 100:
+        if mouse[1] < hieght/14:
             scrolling_screen(0,40)
-        if mouse[1] > -100+hieght:
+        if mouse[1] > -hieght/14+hieght:
             scrolling_screen(0,-40)
 
     shot_sound_first = True
@@ -218,7 +234,7 @@ while True:
         if event.type == pygame.KEYDOWN:
             mouse = pygame.mouse.get_pos()
             for i in buildings:
-                if i.pos[0] - mouse[0] > -175 and i.pos[0] - mouse[0] < 0 and i.pos[1] - mouse[1] > -175 and i.pos[1] - mouse[1] < 0 and money1 >= 50 and i.unittype==['fs','ps'] and i.side == 'm':
+                if i.pos[0] - mouse[0] > -175 and i.pos[0] - mouse[0] < 0 and i.pos[1] - mouse[1] > -175 and i.pos[1] - mouse[1] < 0 and money1 >= 50 and i.unittype==['fs','ps','t'] and i.side == 'm':
                     if event.key == pygame.K_f:
                         i.spawnfs = True
                         done = True
@@ -229,12 +245,17 @@ while True:
                         done = True
                         money1 -= 50
                         check_building = i
+                    if event.key == pygame.K_t:
+                        i.spawnt = True
+                        done = True
+                        money1 -= 50
+                        check_building = i
             if event.key == pygame.K_k:
                 men = []
         if event.type == pygame.MOUSEBUTTONDOWN: 
             
             clicked = pygame.mouse.get_pos()
-            if clicked[0] > 2350 and clicked[0] < 2550 and clicked[1] > 0 and clicked[1] < 225 and money1 >= 300:
+            if clicked[0] > width-((width-20)/20+20) and clicked[0] < width and clicked[1] > 0 and clicked[1] < (width-20)/20 and money1 >= 300:
                 done = False
                 money1-=300
                 while done == False:
@@ -264,11 +285,11 @@ while True:
     for i in buildings:
         # if i.unittype == 'pic' and i.side == 'm':
         #     i.pos[0]-=width
-        if count%15==0 and money2 > 200 and i.side!='m':
+        if count%30==0 and money2 > 200 and i.side!='m':
             i.spawnfs = True
             check_building = i
             money2 -= 50
-            if count%30==0 and money2 > 100 and i.side!='m':
+            if count%50==0 and money2 > 100 and i.side!='m':
                 i.spawnps = True
                 check_building = i
                 money2 -= 50
@@ -302,6 +323,7 @@ while True:
                     i.color = j.color
                 i.spawnfs = False
                 i.spawnps = False
+                i.spawnt = False
             # elif i.unittype != 'pic':
             #     if i.hp < 100:
             #         i.hp += 1
@@ -310,13 +332,16 @@ while True:
         if i.unittype != 'pic':
             pygame.draw.rect(wn,i.color,(i.pos[0],i.pos[1]-20,i.hp,10))
             pygame.draw.rect(wn,(0,0,0),(i.pos[0],i.pos[1]-20,150,10),width=1)
-        if i.unittype==['fs','ps'] and i.spawnfs == True:
+        if i.unittype==['fs','ps','t'] and i.spawnfs == True:
             men.append(flamethrower_soldier([i.pos[0]+100,i.pos[1]+150],i.side,12,i.color))
-        if i.unittype==['fs','ps'] and i.spawnps == True:
+        if i.unittype==['fs','ps','t'] and i.spawnps == True:
             men.append(pistol_soldier([i.pos[0]+100,i.pos[1]+150],i.side,12,i.color))
+        if i.unittype==['fs','ps','t'] and i.spawnt == True:
+            men.append(tank([i.pos[0]+100,i.pos[1]+150],i.side,8,i.color))
             
         i.spawnfs = False
         i.spawnps = False
+        i.spawnt = False
 
     count_for_men_place = 0
     cantattack = []
@@ -376,12 +401,23 @@ while True:
                 
 
 
-            if cantattack != j and i.pos[0] - j.pos[0] > -500 and i.pos[0] - j.pos[0] < 500 and i.pos[1] - j.pos[1] > -500 and i.pos[1] - j.pos[1] < 100 and i.side != j.side and target_picked == False:
+            if cantattack != j and i.pos[0] - j.pos[0] > -500 and i.pos[0] - j.pos[0] < 500 and i.pos[1] - j.pos[1] > -500 and i.pos[1] - j.pos[1] < 500 and i.side != j.side and target_picked == False:
                 if i.unittype == 'ps' and count%2 == 0:
                     if shot_sound_first == True:
                         shot_sound.play()
                     shot_sound_first = False
                     bullets.append(bullet([i.pos[0]+3,i.pos[1]+10],20,[j.pos[0]+40,j.pos[1]+20],i.side))
+                    i.move = False
+                    canshoot = False
+                    cantattack=None
+                    target_picked = True
+
+            if cantattack != j and i.pos[0] - j.pos[0] > -800 and i.pos[0] - j.pos[0] < 800 and i.pos[1] - j.pos[1] > -800 and i.pos[1] - j.pos[1] < 800 and i.side != j.side and target_picked == False:
+                if i.unittype == 't' and count%16 == 0:
+                    if shot_sound_first == True:
+                        shot_sound.play()
+                    shot_sound_first = False
+                    bullets.append(bullet([i.pos[0]+3,i.pos[1]+10],90,[j.pos[0]+40,j.pos[1]+20],i.side))
                     i.move = False
                     canshoot = False
                     cantattack=None
