@@ -1,0 +1,12 @@
+list1=[9, 7, 5, 11, 12, 2, 14, 3, 10, 6]
+list2 = []
+True1 = True
+pivot = 6
+for i in range(len(list1)):
+    if list1[-i-1] >= pivot:
+        list2.append(list1[-i-1])
+
+    else:
+        list2.insert(0,list1[-i-1])
+
+print(list2)

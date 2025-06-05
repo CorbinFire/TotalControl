@@ -15,12 +15,12 @@ wn = pygame.display.set_mode((width-20,hieght-20))
 class background:
     def __init__(self,pos) -> None:
         self.pos = pos
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con background.png'),(width-20,hieght-20))
+        self.im = pygame.transform.scale(pygame.image.load('total con background.png'),(width-20,hieght-20))
 
 class map_hidder:
     def __init__(self,pos) -> None:
         self.pos = pos
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con dark cloud hidemap.png'),((width-20)/40,(width-20)/40))
+        self.im = pygame.transform.scale(pygame.image.load('total con dark cloud hidemap.png'),((width-20)/40,(width-20)/40))
 
 class flamethrower_soldier:
     def __init__(self,pos,side,speed,color) -> None:
@@ -31,7 +31,7 @@ class flamethrower_soldier:
         self.side = side
         self.color = color
         self.unittype='fs'
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con flamethrower soldier.png'),((width-20)/50,(width-20)/50))
+        self.im = pygame.transform.scale(pygame.image.load('total con flamethrower soldier.png'),((width-20)/50,(width-20)/50))
         self.originalpos = pos
         self.speed = speed
         self.pos = pos
@@ -46,7 +46,22 @@ class pistol_soldier:
         self.side = side
         self.color = color
         self.unittype='ps'
-        self.im = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con pistol soldier2.png'),((width-20)/50,(width-20)/50))
+        self.im = pygame.transform.scale(pygame.image.load('total con pistol soldier2.png'),((width-20)/50,(width-20)/50))
+        self.originalpos = pos
+        self.speed = speed
+        self.pos = pos
+        self.target = pos
+
+class tank:
+    def __init__(self,pos,side,speed,color) -> None:
+        self.hp = 700
+        self.move = True
+        self.originalhp = 700
+        self.hpbar = 50
+        self.side = side
+        self.color = color
+        self.unittype='t'
+        self.im = pygame.transform.scale(pygame.image.load('total con tank.png'),((width-20)/35,(width-20)/25))
         self.originalpos = pos
         self.speed = speed
         self.pos = pos
@@ -62,14 +77,14 @@ class buildingsoldiergen:
         self.spawnps = False
         self.spawnt = False
         self.hp = 150
-        self.fspsgen = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con soldier generator.png'),((width-20)/20,(width-20)/20))
+        self.fspsgen = pygame.transform.scale(pygame.image.load('total con soldier generator.png'),((width-20)/20,(width-20)/20))
         self.pos = pos
 
 class picbuildingfspsgen:
     def __init__(self,pos,side) -> None:
         self.unittype='pic'
         self.side = side
-        self.fspsgen = pygame.transform.scale(pygame.image.load('/Users/cameroncheke/TotalControl/total con soldier generator.png'),((width-20)/20,(width-20)/20))
+        self.fspsgen = pygame.transform.scale(pygame.image.load('total con soldier generator.png'),((width-20)/20,(width-20)/20))
         self.pos = pos    
 
 class bullet:
@@ -113,7 +128,7 @@ count = 0
 clicked_on_fs_ps_gen = False
 # die_sound = pygame.mixer.Sound()
 # flame_sound = pygame.mixer.Sound()
-shot_sound = pygame.mixer.Sound('/Users/cameroncheke/TotalControl/gunshot.mp3')
+shot_sound = pygame.mixer.Sound('gunshot.mp3')
 # n = 1
 def scrolling_screen(n1,n2):
     for i in men:
@@ -212,7 +227,7 @@ while True:
     shot_sound_first = True
     check_building=None
     count+=1
-    time.sleep(0.08)
+    time.sleep(0.01)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -240,7 +255,7 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN: 
             
             clicked = pygame.mouse.get_pos()
-            if clicked[0] > 2350 and clicked[0] < 2550 and clicked[1] > 0 and clicked[1] < 225 and money1 >= 300:
+            if clicked[0] > width-((width-20)/20+20) and clicked[0] < width and clicked[1] > 0 and clicked[1] < (width-20)/20 and money1 >= 300:
                 done = False
                 money1-=300
                 while done == False:
