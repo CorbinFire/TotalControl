@@ -25,6 +25,8 @@ class map_hidder:
 class flamethrower_soldier:
     def __init__(self,pos,side,speed,color) -> None:
         self.hp = 120
+        i.firstturn = 'never'
+        self.direction = 'L'
         self.move = True
         self.originalhp = 120
         self.hpbar = 50
@@ -40,6 +42,8 @@ class flamethrower_soldier:
 class pistol_soldier:
     def __init__(self,pos,side,speed,color) -> None:
         self.hp = 70
+        i.firstturn = 'never'
+        self.direction = 'R'
         self.move = True
         self.originalhp = 70
         self.hpbar = 50
@@ -55,6 +59,7 @@ class pistol_soldier:
 class tank:
     def __init__(self,pos,side,speed,color) -> None:
         self.hp = 700
+        i.firstturn = False
         self.move = True
         self.originalhp = 700
         self.hpbar = 50
@@ -121,7 +126,7 @@ map_hidders_destroyed = []
 bullets = []
 destroyed_bullets = []
 walls = []
-men = [tank([500,500],'e',10, (255,0,0))]
+men = []
 dead = []
 buildings = [picbuildingfspsgen([10,10],'m'),picbuildingfspsgen([width-(width)/20,10],'e'),buildingsoldiergen([200,200],'e1',(255,255,0)),buildingsoldiergen([300,300],'e2',(255,0,255))]
 count = 0
@@ -280,8 +285,11 @@ while True:
             for i in men:
                 if i.target == 'find':
                     i.target = [clicked[0],clicked[1]]
+                    if i.unittype == 't':
+                        i.firstturn=True
                 if i.pos[0] - clicked[0] > -75 and i.pos[0] - clicked[0] < 0 and i.pos[1] - clicked[1] > -75 and i.pos[1] - clicked[1] < 0  and i.side == 'm':
                     i.target = 'find'
+                    
     for i in buildings:
         # if i.unittype == 'pic' and i.side == 'm':
         #     i.pos[0]-=width
@@ -355,7 +363,22 @@ while True:
             distance = (dx**2 + dy**2)**0.5
             if distance <= 100:
                 i.target = i.pos
+
             else:
+                if i.speed * dx / distance < 0 and i.unittype != 't':
+                    if i.direction == "L":
+                        i.direction = "R"
+                        i.im = pygame.transform.flip(i.im,1,0)
+                if i.speed * dx / distance > 0 and i.unittype != 't':
+                    if i.direction == "R":
+                        i.direction = "L"
+                        i.im = pygame.transform.flip(i.im,1,0)
+                # if i.unittype == 't' and i.firstturn == True:
+                #     pos = i.target
+                #     xd = pos[0]-i.pos[0]
+                #     yd = -(pos[1]-i.pos[1])
+                #     angle = math.degrees(math.atan2(yd,xd))
+                #     i.im = pygame.transform.rotate(i.im,angle - 90)
                 i.pos[0] += i.speed * dx / distance
                 i.pos[1] += i.speed * dy / distance
         target_picked = False
@@ -418,7 +441,6 @@ while True:
                         shot_sound.play()
                     shot_sound_first = False
                     bullets.append(bullet([i.pos[0]+3,i.pos[1]+10],90,[j.pos[0]+40,j.pos[1]+20],i.side))
-                    i.move = False
                     canshoot = False
                     cantattack=None
                     target_picked = True
@@ -434,6 +456,14 @@ while True:
                     # i.originalpos[0] = j.pos[0]
                     # i.originalpos[1] = j.pos[1]
                 else:
+                    if i.speed * dx / distance < 0 and i.unittype != 't':
+                        if i.direction == "R":
+                            i.direction = "L"
+                            i.im = pygame.transform.flip(i.im,1,0)
+                    if i.speed * dx / distance >= 0 and i.unittype != 't':
+                        if i.direction == "L":
+                            i.direction = "R"
+                            i.im = pygame.transform.flip(i.im,1,0)
                     i.pos[0] += i.speed * dx / distance
                     i.pos[1] += i.speed * dy / distance
                     # i.originalpos[0] += 15 * dx / distance
