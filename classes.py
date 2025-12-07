@@ -1,80 +1,69 @@
-import pygame
-import random
-import time
-import math
-import os
-
-def add_points(a,b):
-    return [a[i]+b[i] for i in range(len(a))]
-
-def within(a,b,c,d,point):
-    return a[0] < point[0] < b[0] and a[1] < point[1] < b[1]
+from imports import *
 
 
+class characterbackbone:
+    def __init__(self,pos,health,UT) -> None:
+        self.pos = pos
+        self.health = health
+        self.UT = UT
 
 class background:
     def __init__(self,pos,square_size) -> None:
         self.pos = pos
         self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
-class assault:
+class assault(characterbackbone):
     def __init__(self,pos) -> None:
-        self.pos = pos
-        self.UT = 'assault'
+        super().__init__(pos,60,'assault')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
-class sniper:
+class sniper(characterbackbone):
     def __init__(self,pos) -> None:
-        self.pos = pos
-        self.UT = 'sniper'
+        super().__init__(pos,60,'sniper')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
-class recon:
+class recon(characterbackbone):
     def __init__(self,pos) -> None:
-        self.pos = pos
-        self.UT = 'recon'
+        super().__init__(pos,60,'recon')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
-class tank:
+class commander(characterbackbone):
     def __init__(self,pos) -> None:
-        self.pos = pos
-        self.UT = 'tank'
+        super().__init__(pos,60,'commander')
+
+class tank(characterbackbone):
+    def __init__(self,pos) -> None:
+        super().__init__(pos,60,'tank')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
-class plane:
+class plane(characterbackbone):
     def __init__(self,pos) -> None:
-        self.pos = pos
-        self.UT = 'plane'
+        super().__init__(pos,60,'plane')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
-class main:
+class main(characterbackbone):
     def __init__(self,pos) -> None:
-        self.pos = pos
-        self.UT = 'main'
+        super().__init__(pos,60,'main')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
-class farm:
+class farm(characterbackbone):
     def __init__(self,pos) -> None:
-        self.pos = pos
-        self.UT = 'farm'
+        super().__init__(pos,60,'farm')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
-class mine:
+class mine(characterbackbone):
     def __init__(self,pos) -> None:
-        self.pos = pos
-        self.UT = 'mine'
+        super().__init__(pos,60,'mine')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
-class factory:
+class factory(characterbackbone):
     def __init__(self,pos) -> None:
-        self.pos = pos
-        self.UT = 'factory'
+        super().__init__(pos,60,'factory')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
-class airport:
+class airport(characterbackbone):
     def __init__(self,pos) -> None:
-        self.pos = pos
-        self.UT = 'airport'
+        super().__init__(pos,60,'airport')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
 
