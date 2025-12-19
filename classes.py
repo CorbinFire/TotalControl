@@ -1,30 +1,61 @@
 from imports import *
 
+pygame.init()
+os.environ['SDL_VIDEO_CENTERED'] = '1'
+info = pygame.display.Info()
+width,hieght = info.current_w,info.current_h
+square_size = np.array([width,width]) if width < hieght else np.array([hieght,hieght])
+sidelen = np.array([0,width]) if width < hieght else np.array([hieght,0])
+add_to_each_point = np.array([0,(hieght-width)/2]) if width < hieght else np.array([(width-hieght)/2,0])
 
 class characterbackbone:
-    def __init__(self,pos,health,UT) -> None:
-        self.pos = pos
+    def __init__(self,pos,health,UT,size,im) -> None:
+        self.pos = np.array(pos)+add_to_each_point
+        self.size = np.array([size[0]*square_size[0],size[1]*square_size[1]])
+        self.im = pygame.transform.scale(pygame.image.load(im),self.size)
+        self.centerpos = np.array([self.pos[0]+self.size[0]/2,self.pos[1]+self.size[1]/2])
         self.health = health
         self.UT = UT
 
+class attack:
+    def __init__(self,dmg,deviation=0):
+        self.dmg = dmg
+        self.deviation = deviation
+    
+    def use(self,opponent):
+        opponent.health -= random.randint(self.dmg-self.deviation,self.dmg+self.deviation)
+
+class sidebarclass:
+    def __init__(self,pos) -> None:
+        self.index = 1
+        self.pgindex = 0
+        self.pages = [{1:['pistol soldier2.png',assault],2:[],3:[],4:[]}]#,[[],[],[],[]],[]]
+        self.page = self.pages[self.pgindex]
+        self.poses = [np.array(pos)-[0.075]*sidelen,np.array(pos)]
+        self.pos = self.poses[self.index]
+        self.sizes = [np.array([0.2*square_size[0],0.4*square_size[1]]),np.array([0.05*square_size[0],0.055*square_size[1]])]
+        self.size = self.sizes[self.index]
+        self.ims = [pygame.transform.scale(pygame.image.load('sidebar.png'),self.sizes[0]),pygame.transform.scale(pygame.image.load('dropbox.png'),self.sizes[1])]
+        self.im = self.ims[self.index]
+
 class background:
-    def __init__(self,pos,square_size) -> None:
-        self.pos = pos
-        self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
+    def __init__(self,pos) -> None:
+        self.pos = np.array(pos)
+        self.im = pygame.transform.scale(pygame.image.load('background.png'),square_size+square_size)
 
 class assault(characterbackbone):
     def __init__(self,pos) -> None:
-        super().__init__(pos,60,'assault')
+        super().__init__(pos,30,'assault',[0.0475,0.055],'pistol soldier2.png')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
 class sniper(characterbackbone):
     def __init__(self,pos) -> None:
-        super().__init__(pos,60,'sniper')
+        super().__init__(pos,30,'sniper')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
 class recon(characterbackbone):
     def __init__(self,pos) -> None:
-        super().__init__(pos,60,'recon')
+        super().__init__(pos,20,'recon')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
 class commander(characterbackbone):
@@ -33,12 +64,12 @@ class commander(characterbackbone):
 
 class tank(characterbackbone):
     def __init__(self,pos) -> None:
-        super().__init__(pos,60,'tank')
+        super().__init__(pos,100,'tank')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
 class plane(characterbackbone):
     def __init__(self,pos) -> None:
-        super().__init__(pos,60,'plane')
+        super().__init__(pos,80,'plane')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
 class main(characterbackbone):
