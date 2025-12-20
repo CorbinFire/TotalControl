@@ -29,7 +29,7 @@ class sidebarclass:
     def __init__(self,pos) -> None:
         self.index = 1
         self.pgindex = 0
-        self.pages = [{1:['pistol soldier2.png',assault],2:[],3:[],4:[]}]#,[[],[],[],[]],[]]
+        self.pages = [{1:['soldier generator.png',main],2:[],3:[],4:[]},{1:['pistol soldier2.png',assault],2:[],3:[],4:[]},{1:['tank.png',tank],2:[],3:[],4:[]}]#,[[],[],[],[]],[]]
         self.page = self.pages[self.pgindex]
         self.poses = [np.array(pos)-[0.075]*sidelen,np.array(pos)]
         self.pos = self.poses[self.index]
@@ -64,7 +64,7 @@ class commander(characterbackbone):
 
 class tank(characterbackbone):
     def __init__(self,pos) -> None:
-        super().__init__(pos,100,'tank')
+        super().__init__(pos,100,'tank',[0.06,0.085],'tank.png')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
 class plane(characterbackbone):
@@ -74,7 +74,7 @@ class plane(characterbackbone):
 
 class main(characterbackbone):
     def __init__(self,pos) -> None:
-        super().__init__(pos,60,'main')
+        super().__init__(pos,60,'main',[0.095,0.1],'soldier generator.png')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
 class farm(characterbackbone):

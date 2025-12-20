@@ -27,21 +27,21 @@ while Home:
     Keys = pygame.key
 
     if Keys.get_pressed()[pygame.K_w]:
-        background1.pos += np.array([0,20])
+        background1.pos += np.array([0,square_size[0]*0.014])
         for unit in p1units:
-            unit.pos += np.array([0,20])
+            unit.pos += np.array([0,square_size[0]*0.014])
     if Keys.get_pressed()[pygame.K_a]:
-        background1.pos += np.array([20,0])
+        background1.pos += np.array([square_size[0]*0.014,0])
         for unit in p1units:
-            unit.pos += np.array([20,0])
+            unit.pos += np.array([square_size[0]*0.014,0])
     if Keys.get_pressed()[pygame.K_d]:
-        background1.pos -= np.array([20,0])
+        background1.pos -= np.array([square_size[0]*0.014,0])
         for unit in p1units:
-            unit.pos -= np.array([20,0])
+            unit.pos -= np.array([square_size[0]*0.014,0])
     if Keys.get_pressed()[pygame.K_s]:
-        background1.pos -= np.array([0,20])
+        background1.pos -= np.array([0,square_size[0]*0.014])
         for unit in p1units:
-            unit.pos -= np.array([0,20])
+            unit.pos -= np.array([0,square_size[0]*0.014])
 
 
     for event in pygame.event.get():
@@ -68,6 +68,14 @@ while Home:
 
             elif within(sidebar.pos+sidebar.size*np.array([0,0.4]), sidebar.pos+sidebar.size*np.array([0,0.4])+sidebar.sizes[1]*np.array([1.85,1.5]), Mouse.get_pos()):
                 clickspawn=sidebar.page[1][1]
+
+            elif within(sidebar.pos+sidebar.size*np.array([0,0.15]), sidebar.pos+sidebar.size*np.array([0,0.15])+sidebar.sizes[1]*np.array([1.85,2]), Mouse.get_pos()):
+                sidebar.pgindex = (sidebar.pgindex-1)%3
+                sidebar.page = sidebar.pages[sidebar.pgindex]
+
+            elif within(sidebar.pos+sidebar.size*np.array([0,0.15])+sidebar.sizes[1]*np.array([1.85,0]), sidebar.pos+sidebar.size*np.array([0,0.15])+sidebar.sizes[1]*np.array([3.7,2]), Mouse.get_pos()):
+                sidebar.pgindex = (sidebar.pgindex+1)%3
+                sidebar.page = sidebar.pages[sidebar.pgindex]
 
 
 
