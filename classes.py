@@ -10,6 +10,7 @@ add_to_each_point = np.array([0,(hieght-width)/2]) if width < hieght else np.arr
 
 class characterbackbone:
     def __init__(self,pos,health,UT,size,im) -> None:
+        self.damage_multiplier = 100/health
         self.pos = np.array(pos)+add_to_each_point
         self.size = np.array([size[0]*square_size[0],size[1]*square_size[1]])
         self.im = pygame.transform.scale(pygame.image.load(im),self.size)
@@ -41,7 +42,7 @@ class sidebarclass:
 class background:
     def __init__(self,pos) -> None:
         self.pos = np.array(pos)
-        self.im = pygame.transform.scale(pygame.image.load('background.png'),square_size+square_size)
+        self.im = pygame.transform.scale(pygame.image.load('background.png'),square_size+square_size+square_size)
 
 class assault(characterbackbone):
     def __init__(self,pos) -> None:

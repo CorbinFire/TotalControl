@@ -25,23 +25,19 @@ while Home:
     time.sleep(0.001)
     Mouse = pygame.mouse
     Keys = pygame.key
+    w = Keys.get_pressed()[pygame.K_w]
+    a = Keys.get_pressed()[pygame.K_a]
+    d = Keys.get_pressed()[pygame.K_d]
+    s = Keys.get_pressed()[pygame.K_s]
+    if w:
+        background1.pos += np.array([0,square_size[0]*0.013])
+    if a:
+        background1.pos += np.array([square_size[0]*0.013,0])
+    if d:
+        background1.pos -= np.array([square_size[0]*0.013,0])
+    if s:
+        background1.pos -= np.array([0,square_size[0]*0.013])
 
-    if Keys.get_pressed()[pygame.K_w]:
-        background1.pos += np.array([0,square_size[0]*0.014])
-        for unit in p1units:
-            unit.pos += np.array([0,square_size[0]*0.014])
-    if Keys.get_pressed()[pygame.K_a]:
-        background1.pos += np.array([square_size[0]*0.014,0])
-        for unit in p1units:
-            unit.pos += np.array([square_size[0]*0.014,0])
-    if Keys.get_pressed()[pygame.K_d]:
-        background1.pos -= np.array([square_size[0]*0.014,0])
-        for unit in p1units:
-            unit.pos -= np.array([square_size[0]*0.014,0])
-    if Keys.get_pressed()[pygame.K_s]:
-        background1.pos -= np.array([0,square_size[0]*0.014])
-        for unit in p1units:
-            unit.pos -= np.array([0,square_size[0]*0.014])
 
 
     for event in pygame.event.get():
@@ -81,11 +77,23 @@ while Home:
 
 
     wn.blit(background1.im, background1.pos)
+    firstshift = True
     for unit in p1units:
         wn.blit(unit.im,unit.pos)
+        pygame.draw.rect(wn,(255,0,0),[unit.pos[0]+unit.size[0]*0.1,unit.pos[1]-unit.size[1]*0.1,(unit.size[0]*0.8*unit.damage_multiplier*unit.health)/100,unit.size[1]*0.075])
+        pygame.draw.rect(wn,(0,0,0),[unit.pos[0]+unit.size[0]*0.1,unit.pos[1]-unit.size[1]*0.1,unit.size[0]*0.8,unit.size[1]*0.075],int(round(unit.size[1]*0.015,0)))
+        if w:
+            unit.pos += np.array([0,square_size[0]*0.013])
+        if a:
+            unit.pos += np.array([square_size[0]*0.013,0])
+        if d:
+            unit.pos -= np.array([square_size[0]*0.013,0])
+        if s:
+            unit.pos -= np.array([0,square_size[0]*0.013])
     wn.fill((0,0,0),[0,0,sidecoverplus[0],sidecoverplus[1]])
     wn.fill((0,0,0),[rightsidecoverpos[0],rightsidecoverpos[1],sidecoverplus[0],sidecoverplus[1]])
     wn.blit(sidebar.im,sidebar.pos)
     if sidebar.index == 0:
         wn.blit(pygame.transform.scale(pygame.image.load(sidebar.page[1][0]),sidebar.sizes[1]),sidebar.pos+sidebar.size/np.array([8,2.3]))
+        
     pygame.display.flip()
