@@ -15,7 +15,8 @@ wn = pygame.display.set_mode([width,hieght],pygame.FULLSCREEN)
 
 sidebar = sidebarclass(rightsidecoverpos+rightsidecoverpos/np.array([8,8]))
 background1 = background(add_to_each_point)
-p1units = [assault([300,300])]
+p1units = [main(square_size*np.array([1/3,1/3]))]
+p2units = [main(square_size*np.array([8/3,8/3]))]
 clickspawn=None
 Home = True
 Main = False
@@ -30,14 +31,24 @@ while Home:
     d = Keys.get_pressed()[pygame.K_d]
     s = Keys.get_pressed()[pygame.K_s]
     if w:
-        background1.pos += np.array([0,square_size[0]*0.013])
+        background1.pos += np.array([0,square_size[0]*0.02])
+        for unit in p1units+p2units:
+            unit.pos += np.array([0,square_size[0]*0.02])
     if a:
-        background1.pos += np.array([square_size[0]*0.013,0])
+        background1.pos += np.array([square_size[0]*0.02,0])
+        for unit in p1units+p2units:
+            unit.pos += np.array([square_size[0]*0.02,0])
     if d:
-        background1.pos -= np.array([square_size[0]*0.013,0])
+        background1.pos -= np.array([square_size[0]*0.02,0])
+        for unit in p1units+p2units:
+            unit.pos -= np.array([square_size[0]*0.02,0])
     if s:
-        background1.pos -= np.array([0,square_size[0]*0.013])
+        background1.pos -= np.array([0,square_size[0]*0.02])
+        for unit in p1units+p2units:
+            unit.pos -= np.array([0,square_size[0]*0.02])
+            
 
+            
 
 
     for event in pygame.event.get():
@@ -80,16 +91,15 @@ while Home:
     firstshift = True
     for unit in p1units:
         wn.blit(unit.im,unit.pos)
+        pygame.draw.rect(wn,(0,0,255),[unit.pos[0]+unit.size[0]*0.1,unit.pos[1]-unit.size[1]*0.1,(unit.size[0]*0.8*unit.damage_multiplier*unit.health)/100,unit.size[1]*0.075])
+        pygame.draw.rect(wn,(0,0,0),[unit.pos[0]+unit.size[0]*0.1,unit.pos[1]-unit.size[1]*0.1,unit.size[0]*0.8,unit.size[1]*0.075],int(round(unit.size[1]*0.015,0)))
+
+    for unit in p2units:
+        wn.blit(unit.im,unit.pos)
         pygame.draw.rect(wn,(255,0,0),[unit.pos[0]+unit.size[0]*0.1,unit.pos[1]-unit.size[1]*0.1,(unit.size[0]*0.8*unit.damage_multiplier*unit.health)/100,unit.size[1]*0.075])
         pygame.draw.rect(wn,(0,0,0),[unit.pos[0]+unit.size[0]*0.1,unit.pos[1]-unit.size[1]*0.1,unit.size[0]*0.8,unit.size[1]*0.075],int(round(unit.size[1]*0.015,0)))
-        if w:
-            unit.pos += np.array([0,square_size[0]*0.013])
-        if a:
-            unit.pos += np.array([square_size[0]*0.013,0])
-        if d:
-            unit.pos -= np.array([square_size[0]*0.013,0])
-        if s:
-            unit.pos -= np.array([0,square_size[0]*0.013])
+    
+        
     wn.fill((0,0,0),[0,0,sidecoverplus[0],sidecoverplus[1]])
     wn.fill((0,0,0),[rightsidecoverpos[0],rightsidecoverpos[1],sidecoverplus[0],sidecoverplus[1]])
     wn.blit(sidebar.im,sidebar.pos)

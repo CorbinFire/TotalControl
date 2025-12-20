@@ -30,23 +30,23 @@ class sidebarclass:
     def __init__(self,pos) -> None:
         self.index = 1
         self.pgindex = 0
-        self.pages = [{1:['soldier generator.png',main],2:[],3:[],4:[]},{1:['pistol soldier2.png',assault],2:[],3:[],4:[]},{1:['tank.png',tank],2:[],3:[],4:[]}]#,[[],[],[],[]],[]]
+        self.pages = [{1:['Assets/soldier generator.png',main],2:[],3:[],4:[]},{1:['Assets/pistol soldier2.png',assault],2:[],3:[],4:[]},{1:['Assets/tank.png',tank],2:[],3:[],4:[]}]#,[[],[],[],[]],[]]
         self.page = self.pages[self.pgindex]
         self.poses = [np.array(pos)-[0.075]*sidelen,np.array(pos)]
         self.pos = self.poses[self.index]
         self.sizes = [np.array([0.2*square_size[0],0.4*square_size[1]]),np.array([0.05*square_size[0],0.055*square_size[1]])]
         self.size = self.sizes[self.index]
-        self.ims = [pygame.transform.scale(pygame.image.load('sidebar.png'),self.sizes[0]),pygame.transform.scale(pygame.image.load('dropbox.png'),self.sizes[1])]
+        self.ims = [pygame.transform.scale(pygame.image.load('Assets/sidebar.png'),self.sizes[0]),pygame.transform.scale(pygame.image.load('Assets/dropbox.png'),self.sizes[1])]
         self.im = self.ims[self.index]
 
 class background:
     def __init__(self,pos) -> None:
         self.pos = np.array(pos)
-        self.im = pygame.transform.scale(pygame.image.load('background.png'),square_size+square_size+square_size)
+        self.im = pygame.transform.scale(pygame.image.load('Assets/background.png'),square_size+square_size+square_size)
 
 class assault(characterbackbone):
     def __init__(self,pos) -> None:
-        super().__init__(pos,30,'assault',[0.0475,0.055],'pistol soldier2.png')
+        super().__init__(pos,30,'assault',[0.02375,0.02725],'Assets/pistol soldier2.png')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
 class sniper(characterbackbone):
@@ -65,7 +65,7 @@ class commander(characterbackbone):
 
 class tank(characterbackbone):
     def __init__(self,pos) -> None:
-        super().__init__(pos,100,'tank',[0.06,0.085],'tank.png')
+        super().__init__(pos,100,'tank',[0.03,0.0425],'Assets/tank.png')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
 class plane(characterbackbone):
@@ -75,7 +75,7 @@ class plane(characterbackbone):
 
 class main(characterbackbone):
     def __init__(self,pos) -> None:
-        super().__init__(pos,60,'main',[0.095,0.1],'soldier generator.png')
+        super().__init__(pos,60,'main',[0.04725,0.05],'Assets/soldier generator.png')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
 class farm(characterbackbone):
