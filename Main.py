@@ -17,6 +17,7 @@ sidebar = sidebarclass(rightsidecoverpos+rightsidecoverpos/np.array([8,8]))
 background1 = background(add_to_each_point)
 p1units = [main(square_size*np.array([1/3,1/3]))]
 p2units = [main(square_size*np.array([8/3,8/3]))]
+
 clickspawn=None
 Home = True
 Main = False
@@ -76,6 +77,9 @@ while Home:
             elif within(sidebar.pos+sidebar.size*np.array([0,0.4]), sidebar.pos+sidebar.size*np.array([0,0.4])+sidebar.sizes[1]*np.array([1.85,1.5]), Mouse.get_pos()):
                 clickspawn=sidebar.page[1][1]
 
+            elif within(sidebar.pos+sidebar.size*np.array([0,0.4])+sidebar.sizes[1]*np.array([1.95,0]), sidebar.pos+sidebar.size*np.array([0,0.4])+sidebar.sizes[1]*np.array([3.9,1.5]), Mouse.get_pos()):
+                clickspawn=sidebar.page[2][1]
+
             elif within(sidebar.pos+sidebar.size*np.array([0,0.15]), sidebar.pos+sidebar.size*np.array([0,0.15])+sidebar.sizes[1]*np.array([1.85,2]), Mouse.get_pos()):
                 sidebar.pgindex = (sidebar.pgindex-1)%3
                 sidebar.page = sidebar.pages[sidebar.pgindex]
@@ -105,5 +109,6 @@ while Home:
     wn.blit(sidebar.im,sidebar.pos)
     if sidebar.index == 0:
         wn.blit(pygame.transform.scale(pygame.image.load(sidebar.page[1][0]),sidebar.sizes[1]),sidebar.pos+sidebar.size/np.array([8,2.3]))
+        wn.blit(pygame.transform.scale(pygame.image.load(sidebar.page[2][0]),sidebar.sizes[1]),sidebar.pos+sidebar.size/np.array([1.8,2.3]))
         
     pygame.display.flip()

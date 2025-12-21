@@ -30,7 +30,7 @@ class sidebarclass:
     def __init__(self,pos) -> None:
         self.index = 1
         self.pgindex = 0
-        self.pages = [{1:['Assets/soldier generator.png',main],2:[],3:[],4:[]},{1:['Assets/pistol soldier2.png',assault],2:[],3:[],4:[]},{1:['Assets/tank.png',tank],2:[],3:[],4:[]}]#,[[],[],[],[]],[]]
+        self.pages = [{1:['Assets/soldier generator.png',main],2:['Assets/farm.png',farm],3:[],4:[]},{1:['Assets/mine.png',mine],2:['Assets/pistol soldier2.png',assault],3:[],4:[]},{1:['Assets/tank.png',tank],2:[],3:[],4:[]}]#,[[],[],[],[]],[]]
         self.page = self.pages[self.pgindex]
         self.poses = [np.array(pos)-[0.075]*sidelen,np.array(pos)]
         self.pos = self.poses[self.index]
@@ -43,6 +43,13 @@ class background:
     def __init__(self,pos) -> None:
         self.pos = np.array(pos)
         self.im = pygame.transform.scale(pygame.image.load('Assets/background.png'),square_size+square_size+square_size)
+
+class bullet(attack):
+    def __init__(self,pos,endpoint,dmg,dev) -> None:
+        super.__init__(dmg,dev)
+        self.pos = np.array(pos)
+        self.im = pygame.transform.scale(pygame.image.load('Assets/bullet.png'),square_size*np.array([0.0075,0.0075]))
+        self.endpoint = np.array(endpoint)
 
 class assault(characterbackbone):
     def __init__(self,pos) -> None:
@@ -80,12 +87,12 @@ class main(characterbackbone):
 
 class farm(characterbackbone):
     def __init__(self,pos) -> None:
-        super().__init__(pos,60,'farm')
+        super().__init__(pos,60,'farm',[0.05225,0.055],'Assets/farm.png')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
 class mine(characterbackbone):
     def __init__(self,pos) -> None:
-        super().__init__(pos,60,'mine')
+        super().__init__(pos,60,'mine',[0.055,0.05],'Assets/mine.png')
         # self.im = pygame.transform.scale(pygame.image.load('total con background.png'),square_size)
 
 class factory(characterbackbone):
