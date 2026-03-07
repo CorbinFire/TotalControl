@@ -13,37 +13,41 @@ rightsidecoverpos = [0,(hieght+width)/2] if width < hieght else [(width+hieght)/
 sidecoverplus = [width,(hieght-width)/2] if width < hieght else [(width-hieght)/2,hieght]
 wn = pygame.display.set_mode([width,hieght],pygame.FULLSCREEN)
 
-sidebar = sidebarclass(rightsidecoverpos+rightsidecoverpos/np.array([8,8]))
+# sidebar = sidebarclass(rightsidecoverpos+rightsidecoverpos/np.array([8,8]))
 background1 = background(add_to_each_point)
-p1units = [main(square_size*np.array([1/3,1/3]))]
-p2units = [main(square_size*np.array([8/3,8/3]))]
+p1units = [main(square_size*np.array([1/3,1/3]),(0,0,255))]
+p2units = [main(square_size*np.array([8/3,8/3]),(255,0,0))]
+font = pygame.font.Font('freesansbold.ttf', 50)
 
 clickspawn=None
 Home = True
 Main = False
 Tutorial = False
 Shop = False
+lastflip = 0
 while Home:
-    time.sleep(0.001)
+    time.sleep(0.01)
+    start=time.time()
     Mouse = pygame.mouse
     Keys = pygame.key
     w = Keys.get_pressed()[pygame.K_w]
     a = Keys.get_pressed()[pygame.K_a]
     d = Keys.get_pressed()[pygame.K_d]
     s = Keys.get_pressed()[pygame.K_s]
-    if w:
+    print(width,hieght,background1.pos)
+    if w and -background1.pos[1] > 0-add_to_each_point[1]:
         background1.pos += np.array([0,square_size[0]*0.02])
         for unit in p1units+p2units:
             unit.pos += np.array([0,square_size[0]*0.02])
-    if a:
+    if a and -background1.pos[0] > 0-add_to_each_point[0]:
         background1.pos += np.array([square_size[0]*0.02,0])
         for unit in p1units+p2units:
             unit.pos += np.array([square_size[0]*0.02,0])
-    if d:
+    if d and -background1.pos[0] < square_size[0]*2-add_to_each_point[0]:
         background1.pos -= np.array([square_size[0]*0.02,0])
         for unit in p1units+p2units:
             unit.pos -= np.array([square_size[0]*0.02,0])
-    if s:
+    if s and -background1.pos[1] < square_size[0]*2-add_to_each_point[1]:
         background1.pos -= np.array([0,square_size[0]*0.02])
         for unit in p1units+p2units:
             unit.pos -= np.array([0,square_size[0]*0.02])
@@ -58,35 +62,36 @@ while Home:
                 Home = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if within(sidebar.pos,sidebar.pos+sidebar.size,Mouse.get_pos()) and sidebar.index == 1:
-                sidebar.index = (sidebar.index+1)%2
-                sidebar.pos = sidebar.poses[sidebar.index]
-                sidebar.size = sidebar.sizes[sidebar.index]
-                sidebar.im = sidebar.ims[sidebar.index]
+            p1units+=[main(np.array(Mouse.get_pos())-add_to_each_point,(255,0,0))]
+        #     if within(sidebar.pos,sidebar.pos+sidebar.size,Mouse.get_pos()) and sidebar.index == 1:
+        #         sidebar.index = (sidebar.index+1)%2
+        #         sidebar.pos = sidebar.poses[sidebar.index]
+        #         sidebar.size = sidebar.sizes[sidebar.index]
+        #         sidebar.im = sidebar.ims[sidebar.index]
 
-            elif within(sidebar.pos+sidebar.size-np.array(sidebar.size/np.array([1.4,5])), sidebar.pos+sidebar.size/np.array([1.4,1]),Mouse.get_pos()) and sidebar.index == 0:
-                sidebar.index = (sidebar.index+1)%2
-                sidebar.pos = sidebar.poses[sidebar.index]
-                sidebar.size = sidebar.sizes[sidebar.index]
-                sidebar.im = sidebar.ims[sidebar.index]
+        #     elif within(sidebar.pos+sidebar.size-np.array(sidebar.size/np.array([1.4,5])), sidebar.pos+sidebar.size/np.array([1.4,1]),Mouse.get_pos()) and sidebar.index == 0:
+        #         sidebar.index = (sidebar.index+1)%2
+        #         sidebar.pos = sidebar.poses[sidebar.index]
+        #         sidebar.size = sidebar.sizes[sidebar.index]
+        #         sidebar.im = sidebar.ims[sidebar.index]
 
-            elif clickspawn!=None:
-                p1units+=[clickspawn(np.array(Mouse.get_pos())-add_to_each_point)]
-                clickspawn=None
+        #     elif clickspawn!=None:
+        #         p1units+=[clickspawn(np.array(Mouse.get_pos())-add_to_each_point)]
+        #         clickspawn=None
 
-            elif within(sidebar.pos+sidebar.size*np.array([0,0.4]), sidebar.pos+sidebar.size*np.array([0,0.4])+sidebar.sizes[1]*np.array([1.85,1.5]), Mouse.get_pos()):
-                clickspawn=sidebar.page[1][1]
+        #     elif within(sidebar.pos+sidebar.size*np.array([0,0.4]), sidebar.pos+sidebar.size*np.array([0,0.4])+sidebar.sizes[1]*np.array([1.85,1.5]), Mouse.get_pos()):
+        #         clickspawn=sidebar.page[1][1]
 
-            elif within(sidebar.pos+sidebar.size*np.array([0,0.4])+sidebar.sizes[1]*np.array([1.95,0]), sidebar.pos+sidebar.size*np.array([0,0.4])+sidebar.sizes[1]*np.array([3.9,1.5]), Mouse.get_pos()):
-                clickspawn=sidebar.page[2][1]
+        #     elif within(sidebar.pos+sidebar.size*np.array([0,0.4])+sidebar.sizes[1]*np.array([1.95,0]), sidebar.pos+sidebar.size*np.array([0,0.4])+sidebar.sizes[1]*np.array([3.9,1.5]), Mouse.get_pos()):
+        #         clickspawn=sidebar.page[2][1]
 
-            elif within(sidebar.pos+sidebar.size*np.array([0,0.15]), sidebar.pos+sidebar.size*np.array([0,0.15])+sidebar.sizes[1]*np.array([1.85,2]), Mouse.get_pos()):
-                sidebar.pgindex = (sidebar.pgindex-1)%3
-                sidebar.page = sidebar.pages[sidebar.pgindex]
+        #     elif within(sidebar.pos+sidebar.size*np.array([0,0.15]), sidebar.pos+sidebar.size*np.array([0,0.15])+sidebar.sizes[1]*np.array([1.85,2]), Mouse.get_pos()):
+        #         sidebar.pgindex = (sidebar.pgindex-1)%3
+        #         sidebar.page = sidebar.pages[sidebar.pgindex]
 
-            elif within(sidebar.pos+sidebar.size*np.array([0,0.15])+sidebar.sizes[1]*np.array([1.85,0]), sidebar.pos+sidebar.size*np.array([0,0.15])+sidebar.sizes[1]*np.array([3.7,2]), Mouse.get_pos()):
-                sidebar.pgindex = (sidebar.pgindex+1)%3
-                sidebar.page = sidebar.pages[sidebar.pgindex]
+        #     elif within(sidebar.pos+sidebar.size*np.array([0,0.15])+sidebar.sizes[1]*np.array([1.85,0]), sidebar.pos+sidebar.size*np.array([0,0.15])+sidebar.sizes[1]*np.array([3.7,2]), Mouse.get_pos()):
+        #         sidebar.pgindex = (sidebar.pgindex+1)%3
+        #         sidebar.page = sidebar.pages[sidebar.pgindex]
 
 
 
@@ -94,11 +99,13 @@ while Home:
     wn.blit(background1.im, background1.pos)
     firstshift = True
     for unit in p1units:
+        unit.move(p1units,time.time())
         wn.blit(unit.im,unit.pos)
         pygame.draw.rect(wn,(0,0,255),[unit.pos[0]+unit.size[0]*0.1,unit.pos[1]-unit.size[1]*0.1,(unit.size[0]*0.8*unit.damage_multiplier*unit.health)/100,unit.size[1]*0.075])
         pygame.draw.rect(wn,(0,0,0),[unit.pos[0]+unit.size[0]*0.1,unit.pos[1]-unit.size[1]*0.1,unit.size[0]*0.8,unit.size[1]*0.075],int(round(unit.size[1]*0.015,0)))
 
     for unit in p2units:
+        unit.move(p2units,time.time())
         wn.blit(unit.im,unit.pos)
         pygame.draw.rect(wn,(255,0,0),[unit.pos[0]+unit.size[0]*0.1,unit.pos[1]-unit.size[1]*0.1,(unit.size[0]*0.8*unit.damage_multiplier*unit.health)/100,unit.size[1]*0.075])
         pygame.draw.rect(wn,(0,0,0),[unit.pos[0]+unit.size[0]*0.1,unit.pos[1]-unit.size[1]*0.1,unit.size[0]*0.8,unit.size[1]*0.075],int(round(unit.size[1]*0.015,0)))
@@ -106,9 +113,12 @@ while Home:
         
     wn.fill((0,0,0),[0,0,sidecoverplus[0],sidecoverplus[1]])
     wn.fill((0,0,0),[rightsidecoverpos[0],rightsidecoverpos[1],sidecoverplus[0],sidecoverplus[1]])
-    wn.blit(sidebar.im,sidebar.pos)
-    if sidebar.index == 0:
-        wn.blit(pygame.transform.scale(pygame.image.load(sidebar.page[1][0]),sidebar.sizes[1]),sidebar.pos+sidebar.size/np.array([8,2.3]))
-        wn.blit(pygame.transform.scale(pygame.image.load(sidebar.page[2][0]),sidebar.sizes[1]),sidebar.pos+sidebar.size/np.array([1.8,2.3]))
-        
+    # wn.blit(sidebar.im,sidebar.pos)
+    # if sidebar.index == 0:
+    #     wn.blit(pygame.transform.scale(pygame.image.load(sidebar.page[1][0]),sidebar.sizes[1]),sidebar.pos+sidebar.size/np.array([8,2.3]))
+    #     wn.blit(pygame.transform.scale(pygame.image.load(sidebar.page[2][0]),sidebar.sizes[1]),sidebar.pos+sidebar.size/np.array([1.8,2.3]))
+
+    wn.blit(font.render(f'fps {time.time()-start}', True,(0,255,0)),(0,0))
+    # if time.time()-lastflip > 0.1:
     pygame.display.flip()
+    #     lastflip = time.time()
